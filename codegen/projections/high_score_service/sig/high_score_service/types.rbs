@@ -1,0 +1,40 @@
+# frozen_string_literal: true
+
+# WARNING ABOUT GENERATED CODE
+#
+# This file was code generated using smithy-ruby.
+# https://github.com/awslabs/smithy-ruby
+#
+# WARNING ABOUT GENERATED CODE
+
+module HighScoreService
+  module Types
+
+    CreateHighScoreInput: untyped
+
+    CreateHighScoreOutput: untyped
+
+    DeleteHighScoreInput: untyped
+
+    DeleteHighScoreOutput: untyped
+
+    GetHighScoreInput: untyped
+
+    GetHighScoreOutput: untyped
+
+    HighScoreAttributes: untyped
+
+    HighScoreParams: untyped
+
+    ListHighScoresInput: untyped
+
+    ListHighScoresOutput: untyped
+
+    UnprocessableEntityError: untyped
+
+    UpdateHighScoreInput: untyped
+
+    UpdateHighScoreOutput: untyped
+
+  end
+end
