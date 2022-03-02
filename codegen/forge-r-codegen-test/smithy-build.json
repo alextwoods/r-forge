@@ -1,41 +1,17 @@
 {
   "version": "1.0",
   "projections": {
-    "weather-service": {
+    "Crc": {
       "transforms": [
         {
           "name": "includeServices",
-          "args": { "services":  ["example.weather#Weather"]}
+          "args": { "services":  ["forge.crt#Crc"]}
         }
       ],
       "plugins": {
-        "ruby-codegen": {
-          "service": "example.weather#Weather",
-          "module": "Weather",
-          "gemspec": {
-            "gemName": "weather",
-            "gemVersion": "0.0.1",
-            "gemSummary": "Sample Smithy Weather Service"
-          }
-        }
-      }
-    },
-    "white-label": {
-      "transforms": [
-        {
-          "name": "includeServices",
-          "args": { "services":  ["smithy.ruby.tests#WhiteLabel"]}
-        }
-      ],
-      "plugins": {
-        "ruby-codegen": {
-          "service": "smithy.ruby.tests#WhiteLabel",
-          "module": "WhiteLabel",
-          "gemspec": {
-            "gemName": "white_label",
-            "gemVersion": "0.0.1",
-            "gemSummary": "White Label Test Service"
-          }
+        "r-forge-codegen": {
+          "service": "forge.crt#Crc",
+          "module": "crc"
         }
       }
     }

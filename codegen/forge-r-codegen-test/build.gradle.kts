@@ -31,25 +31,11 @@ dependencies {
     implementation(project(":forge-r-codegen"))
 }
 
-tasks.register<Copy>("copyWhiteLabelGem") {
-    from("$buildDir/smithyprojections/smithy-ruby-codegen-test/white-label/ruby-codegen")
-    into("$buildDir/../../projections/")
+tasks.register<Copy>("copyCrc") {
+    from("$buildDir/smithyprojections/forge-r-codegen-test/Crc/r-forge-codegen/crc.cpp")
+    into("/Users/alexwoo/R/AwsSdkCrt/src/")
 }
-tasks.register<Copy>("copyWeatherServiceGem") {
-    from("$buildDir/smithyprojections/smithy-ruby-codegen-test/weather-service/ruby-codegen")
-    into("$buildDir/../../projections/")
-}
-tasks.register<Copy>("copyIntegrationSpecs") {
-    from("./integration-specs")
-    into("$buildDir/smithyprojections/smithy-ruby-codegen-test/white-label/ruby-codegen/white_label/spec")
-}
-tasks.register<Copy>("copySteepfile") {
-    from("./Steepfile")
-    into("$buildDir/smithyprojections/smithy-ruby-codegen-test/white-label/ruby-codegen/white_label")
-}
+
 tasks["build"].finalizedBy(
-    tasks["copyWeatherServiceGem"],
-    tasks["copyWhiteLabelGem"],
-    tasks["copyIntegrationSpecs"],
-    tasks["copySteepfile"]
+    tasks["copyCrc"],
 )

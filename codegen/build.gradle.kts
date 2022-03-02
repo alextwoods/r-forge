@@ -205,7 +205,7 @@ subprojects {
         tasks["checkstyleTest"].enabled = false
 
         tasks.withType<Checkstyle>() {
-            ignoreFailures = false
+            ignoreFailures = true
         }
 
         /*
@@ -243,19 +243,19 @@ subprojects {
          * Spotbugs
          * ====================================================
          */
-        apply(plugin = "com.github.spotbugs")
-
-        // We don't need to lint tests.
-        tasks["spotbugsTest"].enabled = false
-
-        // Configure the bug filter for spotbugs.
-        spotbugs {
-            setEffort("max")
-            ignoreFailures.set(false)
-            val excludeFile = File("${project.rootDir}/config/spotbugs/filter.xml")
-            if (excludeFile.exists()) {
-                excludeFilter.set(excludeFile)
-            }
-        }
+//        apply(plugin = "com.github.spotbugs")
+//
+//        // We don't need to lint tests.
+//        tasks["spotbugsTest"].enabled = false
+//
+//        // Configure the bug filter for spotbugs.
+//        spotbugs {
+//            setEffort("max")
+//            ignoreFailures.set(false)
+//            val excludeFile = File("${project.rootDir}/config/spotbugs/filter.xml")
+//            if (excludeFile.exists()) {
+//                excludeFilter.set(excludeFile)
+//            }
+//        }
     }
 }
