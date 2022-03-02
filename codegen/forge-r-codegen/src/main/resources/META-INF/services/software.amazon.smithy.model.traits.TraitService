@@ -1,1 +1,5 @@
-software.amazon.forge.r.codegen.traits.CType$Provider
+software.amazon.forge.r.codegen.traits.CTypeTrait$Provider
+software.amazon.forge.r.codegen.traits.ConstTrait$Provider
+software.amazon.forge.r.codegen.traits.OpaqueTrait$Provider
+software.amazon.forge.r.codegen.traits.PointerTrait$Provider
+software.amazon.forge.r.codegen.traits.CrtBindingTrait$Provider

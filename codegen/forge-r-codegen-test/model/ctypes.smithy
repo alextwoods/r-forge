@@ -37,10 +37,5 @@ structure size_t {
     value: BigInteger
 }
 
-@ctype("char *")
-structure string {
-    value: String
-}
-
 @ctype("void")
 structure void {}

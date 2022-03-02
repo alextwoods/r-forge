@@ -4,20 +4,20 @@ import software.amazon.smithy.model.SourceLocation;
 import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.traits.StringTrait;
 
-public final class CType extends StringTrait {
+public final class CTypeTrait extends StringTrait {
     public static final ShapeId ID = ShapeId.from("forge.crt#ctype");
 
-    public CType(String value, SourceLocation sourceLocation) {
+    public CTypeTrait(String value, SourceLocation sourceLocation) {
         super(ID, value, sourceLocation);
     }
 
-    public CType(String value) {
+    public CTypeTrait(String value) {
         this(value, SourceLocation.NONE);
     }
 
-    public static final class Provider extends StringTrait.Provider<CType> {
+    public static final class Provider extends StringTrait.Provider<CTypeTrait> {
         public Provider() {
-            super(ID, CType::new);
+            super(ID, CTypeTrait::new);
         }
     }
 }

@@ -13,3 +13,9 @@ structure pointer {
 
 @trait
 structure const {}
+
+@trait(selector: "operation")
+structure crtBinding {
+    definedIn: String,
+    functionName: String
+}

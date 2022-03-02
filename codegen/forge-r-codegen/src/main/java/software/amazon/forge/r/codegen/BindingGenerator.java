@@ -1,6 +1,7 @@
 package software.amazon.forge.r.codegen;
 
-import software.amazon.forge.r.codegen.traits.CType;
+import software.amazon.forge.r.codegen.traits.CTypeTrait;
+import software.amazon.forge.r.codegen.traits.CrtBindingTrait;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.knowledge.TopDownIndex;
@@ -10,7 +11,6 @@ import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.StructureShape;
 import software.amazon.smithy.utils.CaseUtils;
 import software.amazon.smithy.utils.CodeWriter;
-import software.amazon.smithy.utils.StringUtils;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -51,25 +51,29 @@ public class BindingGenerator {
     }
 
     private void renderFunction(OperationShape o) {
-        String functionName = CaseUtils.toSnakeCase(o.getId().getName());
+        String rcppFunName = CaseUtils.toSnakeCase(o.getId().getName());
+        String crtFunName = rcppFunName;
+        if (o.hasTrait(CrtBindingTrait.class) && o.getTrait(CrtBindingTrait.class).get().getFunctionName().isPresent()) {
+            crtFunName = o.getTrait(CrtBindingTrait.class).get().getFunctionName().get();
+        }
         StructureShape input = model.expectShape(o.getInputShape(), StructureShape.class);
         StructureShape output = model.expectShape(o.getOutputShape(), StructureShape.class);
 
         if (output.getMember("ret").isPresent()) {
             MemberShape ret = output.getMember("ret").get();
             Shape retTarget = model.expectShape(ret.getTarget());
-            String returnType = retTarget.getTrait(CType.class).get().getValue();
+            String returnType = retTarget.getTrait(CTypeTrait.class).get().getValue();
 
             String rcppInputs = input.members().stream().map( (m) ->
                 writer.format("$L $L", rcppType(m), m.getMemberName())
             ).collect(Collectors.joining(", "));
 
             writer.write("\n// [[Rcpp::export]]");
-            writer.openBlock("$L rcpp_$L($L) { ", returnType, functionName, rcppInputs);
+            writer.openBlock("$L rcpp_$L($L) { ", returnType, rcppFunName, rcppInputs);
 
             String transformedArgs = generateConversions(input);
 
-            writer.write("return $L($L);", functionName, transformedArgs);
+            writer.write("return $L($L);", crtFunName, transformedArgs);
             writer.closeBlock("}");
         }
         // TODO, handle different return styles?
@@ -95,15 +99,22 @@ public class BindingGenerator {
         if (target.isStringShape()) {
             return "StringVector";
         } else {
-            return target.getTrait(CType.class).get().getValue();
+            return target.getTrait(CTypeTrait.class).get().getValue();
         }
     }
 
     private void renderIncludes() {
-        writer
-                .write("#include <Rcpp.h>")
-                .write("#include <aws/checksums/crc.h>") // TODO - add a trait and generate correctly
-                .write("using namespace Rcpp;")
-                .write("");
+        TopDownIndex topDownIndex = TopDownIndex.of(model);
+        Set<OperationShape> containedOperations = new TreeSet<>(
+                topDownIndex.getContainedOperations(context.getService()));
+        Set<String> includes = containedOperations.stream()
+                .filter( (o) -> o.hasTrait(CrtBindingTrait.class) && o.getTrait(CrtBindingTrait.class).get().getDefinedIn().isPresent())
+                .map( (o) -> o.getTrait(CrtBindingTrait.class).get().getDefinedIn().get())
+                .collect(Collectors.toSet());
+
+
+        writer.write("#include <Rcpp.h>");
+        includes.forEach( (include) -> writer.write("#include <$L>", include));
+        writer.write("using namespace Rcpp;");
     }
 }
