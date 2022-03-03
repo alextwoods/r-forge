@@ -3,6 +3,7 @@ package software.amazon.forge.r.codegen;
 import software.amazon.forge.r.codegen.traits.CTypeTrait;
 import software.amazon.forge.r.codegen.traits.CrtBindingTrait;
 import software.amazon.smithy.build.FileManifest;
+import software.amazon.smithy.codegen.core.CodegenException;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.knowledge.TopDownIndex;
 import software.amazon.smithy.model.shapes.MemberShape;
@@ -62,7 +63,7 @@ public class BindingGenerator {
         if (output.getMember("ret").isPresent()) {
             MemberShape ret = output.getMember("ret").get();
             Shape retTarget = model.expectShape(ret.getTarget());
-            String returnType = retTarget.getTrait(CTypeTrait.class).get().getValue();
+            String returnType = determineReturnType(retTarget);
 
             String rcppInputs = input.members().stream().map( (m) ->
                 writer.format("$L $L", rcppType(m), m.getMemberName())
@@ -73,11 +74,27 @@ public class BindingGenerator {
 
             String transformedArgs = generateConversions(input);
 
-            writer.write("return $L($L);", crtFunName, transformedArgs);
+            if (retTarget.hasTrait(CTypeTrait.class)) {
+                writer.write("return $L($L);", crtFunName, transformedArgs);
+            } else if (retTarget.isStringShape()) {
+                writer.write("return String( $L($L) );", crtFunName, transformedArgs);
+            } else {
+                throw new CodegenException ("Unable to generate return statement");
+            }
             writer.closeBlock("}");
         }
         // TODO, handle different return styles?
 
+    }
+
+    private String determineReturnType(Shape retTarget) {
+        if (retTarget.hasTrait(CTypeTrait.class)) {
+            return retTarget.getTrait(CTypeTrait.class).get().getValue();
+        } else if (retTarget.isStringShape()) {
+            return "String";
+        } else {
+            throw new CodegenException ("Unable to determine return type");
+        }
     }
 
     private String generateConversions(StructureShape input) {

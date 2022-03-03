@@ -7,6 +7,11 @@ structure uint8_t {
     value: Integer
 }
 
+@ctype("int")
+structure int {
+    value: Integer
+}
+
 @ctype("uint16_t")
 structure uint16_t {
     value: Integer

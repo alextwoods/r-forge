@@ -36,6 +36,12 @@ tasks.register<Copy>("copyCrc") {
     into("/Users/alexwoo/R/AwsSdkCrt/src/")
 }
 
+tasks.register<Copy>("copyCommon") {
+    from("$buildDir/smithyprojections/forge-r-codegen-test/Common/r-forge-codegen/common.cpp")
+    into("/Users/alexwoo/R/AwsSdkCrt/src/")
+}
+
 tasks["build"].finalizedBy(
     tasks["copyCrc"],
+    tasks["copyCommon"]
 )
