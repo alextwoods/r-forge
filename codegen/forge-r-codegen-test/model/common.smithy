@@ -19,7 +19,7 @@ structure aws_crt_last_error_output {
     ret: int
 }
 
-@crtBinding(definedIn: "aws/common/error.h", functionName: "aws_last_error")
+@crtBinding(definedIn: "api.h", functionName: "aws_crt_last_error")
 operation AwsLastError {
     input: void,
     output: aws_crt_last_error_output
@@ -35,7 +35,7 @@ structure aws_crt_error_str_output {
     ret: String
 }
 
-@crtBinding(definedIn: "aws/common/error.h", functionName: "aws_error_str")
+@crtBinding(definedIn: "api.h", functionName: "aws_crt_error_str")
 operation AwsErrorStr {
     input: aws_crt_error_str_input,
     output: aws_crt_error_str_output
@@ -51,7 +51,7 @@ structure aws_crt_error_name_output {
     ret: String
 }
 
-@crtBinding(definedIn: "aws/common/error.h", functionName: "aws_error_name")
+@crtBinding(definedIn: "api.h", functionName: "aws_crt_error_name")
 operation AwsErrorName {
     input: aws_crt_error_name_input,
     output: aws_crt_error_name_output
@@ -67,13 +67,13 @@ structure aws_crt_error_debug_str_output {
     ret: String
 }
 
-@crtBinding(definedIn: "aws/common/error.h", functionName: "aws_error_debug_str")
+@crtBinding(definedIn: "api.h", functionName: "aws_crt_error_debug_str")
 operation AwsErrorDebugStr {
     input: aws_crt_error_debug_str_input,
     output: aws_crt_error_debug_str_output
 }
 
-@crtBinding(definedIn: "aws/common/error.h", functionName: "aws_reset_error")
+@crtBinding(definedIn: "api.h", functionName: "aws_crt_reset_error")
 operation AwsResetError {
     input: void,
     output: void
@@ -87,7 +87,7 @@ structure aws_crt_test_error_output {
     ret: int
 }
 
-@crtBinding(definedIn: "aws/common/error.h", functionName: "aws_raise_error")
+@crtBinding(definedIn: "api.h", functionName: "aws_crt_test_error")
 operation AwsTestError {
     input: aws_crt_test_error_input,
     output: aws_crt_test_error_output
