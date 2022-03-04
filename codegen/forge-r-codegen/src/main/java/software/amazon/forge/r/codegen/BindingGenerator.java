@@ -70,7 +70,7 @@ public class BindingGenerator {
             ).collect(Collectors.joining(", "));
 
             writer.write("\n// [[Rcpp::export]]");
-            writer.openBlock("$L rcpp_$L($L) { ", returnType, rcppFunName, rcppInputs);
+            writer.openBlock("$L $L($L) { ", returnType, rcppFunName, rcppInputs);
 
             String transformedArgs = generateConversions(input);
 
@@ -83,7 +83,7 @@ public class BindingGenerator {
             }
             writer.closeBlock("}");
         }
-        // TODO, handle different return styles?
+        // TODO, handle different return styles
 
     }
 
